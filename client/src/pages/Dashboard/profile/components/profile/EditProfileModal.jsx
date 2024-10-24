@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import axios from 'axios'; // Import Axios
-import { ToastContainer, toast } from 'react-toastify'; // Import Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
+import React, { useState } from "react";
+import axios from "axios"; // Import Axios
+import { ToastContainer, toast } from "react-toastify"; // Import Toastify
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 
 const EditProfileModal = ({ isOpen, onClose }) => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState(""); // New state for role
   const [loading, setLoading] = useState(false); // For loading state
   const [error, setError] = useState(null); // For input validation
 
   const validateUsername = (name) => {
     if (name.length < 4) {
-      setError('Username must be at least 4 characters long');
+      setError("Username must be at least 4 characters long");
       return false;
     } else {
       setError(null);
@@ -25,10 +26,10 @@ const EditProfileModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    const token = localStorage.getItem('token'); // Get token from local storage
+    const token = localStorage.getItem("token"); // Get token from local storage
 
     if (!token) {
-      toast.error('Authorization token missing. Please log in again.');
+      toast.error("Authorization token missing. Please log in again.");
       return;
     }
 
@@ -36,30 +37,30 @@ const EditProfileModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.put(
-        'http://localhost:3001/user/edit-name',
-        { name: username }, // Send the username in the body
+        "http://localhost:3001/user/edit-profile",
+        { name: username, role }, // Send the username and role in the body
         {
           headers: {
             Authorization: token,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 200) {
-        toast.success('Username updated successfully!');
+        toast.success("Profile updated successfully!");
         onClose(); // Close modal after success
         window.location.reload();
       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 400) {
-          toast.error('Invalid request. Please try again.');
+          toast.error("Invalid request. Please try again.");
         } else if (error.response.status === 500) {
-          toast.error('Server error. Please try again later.');
+          toast.error("Server error. Please try again later.");
         }
       } else {
-        toast.error('An unexpected error occurred!');
+        toast.error("An unexpected error occurred!");
       }
     } finally {
       setLoading(false); // Stop loading
@@ -69,6 +70,10 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   const handleInputChange = (e) => {
     setUsername(e.target.value);
     validateUsername(e.target.value);
+  };
+
+  const handleRoleChange = (e) => {
+    setRole(e.target.value);
   };
 
   return (
@@ -97,22 +102,36 @@ const EditProfileModal = ({ isOpen, onClose }) => {
                   placeholder="Enter new username"
                   value={username}
                   onChange={handleInputChange}
-                  className={`w-full p-2 border ${error ? 'border-red-500' : 'border-black'} rounded focus:outline-none focus:border-blue-500`}
+                  className={`w-full p-2 border ${
+                    error ? "border-red-500" : "border-black"
+                  } rounded focus:outline-none focus:border-blue-500`}
                 />
-                {error && (
-                  <p className="text-red-500 text-sm mt-1">{error}</p>
-                )}
+                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+              </div>
+
+              {/* Role Input */}
+              <div className="mb-4">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Role
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your role"
+                  value={role}
+                  onChange={handleRoleChange}
+                  className="w-full p-2 border border-black rounded focus:outline-none focus:border-blue-500"
+                />
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
                 className={`w-full py-2 px-4 text-white rounded-lg transition-colors ${
-                  loading ? 'bg-gray-500' : 'bg-blue-950 hover:bg-blue-900'
+                  loading ? "bg-gray-500" : "bg-blue-950 hover:bg-blue-900"
                 }`}
                 disabled={loading}
               >
-                {loading ? 'Saving...' : 'Save Changes'}
+                {loading ? "Saving..." : "Save Changes"}
               </button>
             </form>
           </div>
