@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const { Admin } = require("../db/index"); // Import the Admin model
-const { validateAdminSignIn, tokenValidationAdmin, tokenValidationUser, validateUserStateChange } = require("../middlewares/AdminMiddlewares"); // Import the validation middleware
+const { validateAdminSignIn, tokenValidationAdmin, tokenValidationUser, validateUserStateChange ,blockProject} = require("../middlewares/AdminMiddlewares"); // Import the validation middleware
 const { validateProjectApproval, approveProject, getAllProjects, getAllUsers } = require("../middlewares/AdminMiddlewares");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -49,6 +49,9 @@ router.post("/signin", validateAdminSignIn, async (req, res) => {
 // Additional routes can be defined here
 router.post("/approve-project",tokenValidationAdmin, validateProjectApproval, approveProject);
 
+// route for blocking project feature
+router.post("/block-project",blockProject);
+
 // Route to get all users (excluding passwords) and their projects
 router.get("/all-users",tokenValidationAdmin, getAllUsers);
 
@@ -56,6 +59,7 @@ router.get("/all-users",tokenValidationAdmin, getAllUsers);
 router.get("/all-projects",tokenValidationAdmin, getAllProjects);
 
 router.get("/all-users-Users", tokenValidationUser, getAllUsers);
+
 
 router.put("/user-state",tokenValidationAdmin,validateUserStateChange, async (req,res)=>{
     //request body

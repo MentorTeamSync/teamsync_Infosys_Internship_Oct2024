@@ -44,6 +44,43 @@ const validateProjectApproval = (req, res, next) => {
 };
 
 
+//Middleware function to handle block project logic 
+
+const blockProject=async(req,res)=>{
+    try{
+
+        const { project_id} = req.body;
+        
+        // Extract admin ID from the authenticated user
+
+        const project = await Project.findOne({ id: project_id });
+           
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+        const name=project.name;
+
+        //check if project is already blocked
+        if(project.is_blocked){
+            return res.status(400).json({message:"Project is already blocked",name:name});
+        }
+        await Project.findOneAndUpdate({ id: project_id }, { $set: { is_blocked: true } }, { new: true });
+        
+        return res.status(200).json({
+            message: `Project ${project.name} has been blocked successfully.`,
+            name:name
+        });
+    } catch (error) {
+        console.error('Error during blocking project:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+
+
+    }
+
+
+
+
 // Middleware function to handle the project approval logic
 const approveProject = async (req, res) => {
     try {
@@ -159,6 +196,7 @@ const getAllProjects = async (req, res) => {
                     deadline: 1,
                     creator_id: 1,
                     is_approved: 1,
+                    is_blocked:1,
                     status: 1,
                     noUsers: 1,
                     tags: '$tags.tag_name' // Only return the tag names
@@ -199,5 +237,6 @@ module.exports = {
     getAllProjects,
     tokenValidationAdmin,
     tokenValidationUser,
-    validateUserStateChange
+    validateUserStateChange,
+    blockProject
 };

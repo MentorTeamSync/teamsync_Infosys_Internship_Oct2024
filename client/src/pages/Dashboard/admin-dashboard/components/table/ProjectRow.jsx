@@ -16,6 +16,46 @@ export const ProjectRow = ({ project }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+  const handleBlockClick=async ()=>{
+    const toastId = toast.loading('wait blocking  project...');
+    try{
+      const token = localStorage.getItem('token'); // Get JWT token from localStorage
+      
+      const response = await axios.post(
+        'http://localhost:3001/admin/block-project',
+        {
+          project_id: project.id,
+          
+        },
+        {
+          headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const projectname=response.data.name;
+      
+      
+        
+      if (response.status === 200) {
+        toast.success(  `${projectname} has been blocked `, { id: toastId });
+        
+        window.location.reload(); // Hard reload the page
+      }
+      if(response.status===400){
+        toast.success(  `${projectname} has already been blocked been blocked `, { id: toastId });
+        window.location.reload();
+      }
+
+      console.log(response);
+
+
+    }catch (error) {
+      let errorMessage = "An unexpected error occurred";
+      toast.error(errorMessage, { id: toastId });
+  }
+}
 
   const handleConfirmApprove = async () => {
     const toastId = toast.loading('Approving project...');
@@ -131,6 +171,14 @@ export const ProjectRow = ({ project }) => {
                   Approve Project
                 </button>
               )}
+               {!project.is_blocked&&(<button
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
+                  onClick={handleBlockClick}
+                >
+                  Block
+                </button>
+                 )}
+
             </div>
           )}
         </td>

@@ -6,7 +6,7 @@ require('dotenv').config();
 // Connect to MongoDB
 if (!process.env.DB_CONNECTION_STRING) {
     console.error("DB_CONNECTION_STRING is not defined in .env file");
-    process.exit(1); // Exit the process with failure
+   process.exit(1); // Exit the process with failure
 }
 
 mongoose.connect(process.env.DB_CONNECTION_STRING)
@@ -134,6 +134,11 @@ const ProjectSchema = new mongoose.Schema({
     is_approved: {
         type: Boolean,
         default: false
+    },
+    is_blocked:{
+        type:Boolean,
+        default:false
+
     },
     status: {
         type: String,

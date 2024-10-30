@@ -131,6 +131,12 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
   };
 
   const handleAddUsers = async () => {
+
+    if (project.is_blocked) {
+      toast.warning('This Project is blocked by admin from adding new users');
+      return;
+    }
+
     if (!project.is_approved) {
       toast.warning('Please verify the project first and then try adding users.');
       return;
@@ -287,7 +293,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
                 className="p-2 hover:bg-blue-50 rounded-full cursor-pointer"
                 onClick={handleAddUsers}
               >
-                <Plus className="w-4 h-4 text-green-500" />
+                <Plus className={`w-4 h-4 ${project.is_blocked?"text-red-500":"text-green-500"}`} />
               </button>
               <button
                 className="p-2 hover:bg-blue-50 rounded-full cursor-pointer"

@@ -86,6 +86,7 @@ router.get("/my-created-projects",checkUserEmailExists,async (req,res)=>{
                 deadline: 1,
                 creator_id: 1,
                 is_approved: 1,
+                is_blocked:1,
                 status: 1,
                 priority: 1,
                 noUsers:1,
