@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { BiChat } from 'react-icons/bi';
+import { FaReply } from 'react-icons/fa';
 
 const ChatModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,7 +9,6 @@ const ChatModal = () => {
   const [media, setMedia] = useState(null);
   const [messages, setMessages] = useState([]);
   const [userReactions, setUserReactions] = useState({});
-  const [isLikeDislikeUpdate, setIsLikeDislikeUpdate] = useState(false); // New state
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
@@ -26,7 +26,7 @@ const ChatModal = () => {
     return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
   };
 
-  const fetchMessages = async (isReactionUpdate = false) => { // Accept parameter
+  const fetchMessages = async () => {
     try {
       const token = localStorage.getItem('token');
       const projectId = localStorage.getItem('project_id');
@@ -38,12 +38,10 @@ const ChatModal = () => {
       );
       
       setMessages(response.data);
-      setIsLikeDislikeUpdate(isReactionUpdate); // Set the reaction update state
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
   };
-  
 
   useEffect(() => {
     if (isOpen) {
@@ -52,29 +50,8 @@ const ChatModal = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isLikeDislikeUpdate) { // Only scroll if it's not a like/dislike update
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsLikeDislikeUpdate(false); // Reset after handling
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  // Add this useEffect hook for keyboard events
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
-        sendMessage();
-      } else if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [message, isOpen]);
-  
 
   const handleLikeDislike = async (commentId, isLike) => {
     try {
@@ -88,12 +65,11 @@ const ChatModal = () => {
         { headers: { Authorization: token } }
       );
       
-      fetchMessages(true); // Pass true to indicate a reaction update
+      fetchMessages();
     } catch (error) {
       console.error('Error updating like/dislike:', error);
     }
   };
-  
 
   const formatFileSize = (bytes) => {
     if (bytes < 1024) return bytes + ' B';
@@ -103,6 +79,7 @@ const ChatModal = () => {
 
   const handleFileDownload = async (file) => {
     try {
+      // Convert base64 to blob
       const byteCharacters = atob(file.file_data);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -111,6 +88,7 @@ const ChatModal = () => {
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: file.file_type });
 
+      // Create download link
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -118,6 +96,7 @@ const ChatModal = () => {
       document.body.appendChild(a);
       a.click();
 
+      // Cleanup
       window.URL.revokeObjectURL(url);
       a.remove();
     } catch (error) {
@@ -126,9 +105,12 @@ const ChatModal = () => {
   };
 
   const FileDisplay = ({ file }) => (
-    <div className="mt-2 p-2 bg-gray-100 rounded-lg shadow-sm">
+    <div className="mt-2 p-2 bg-gray-200 rounded-lg">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
           <span className="text-sm font-medium">{file.file_name}</span>
           <span className="text-xs text-gray-500">({formatFileSize(file.file_size)})</span>
         </div>
@@ -147,7 +129,7 @@ const ChatModal = () => {
       try {
         const token = localStorage.getItem('token');
         const projectId = localStorage.getItem('project_id');
-        const creatorId = localStorage.getItem('userName');
+        const creatorId = localStorage.getItem('userEmail');
         
         const requestBody = {
           project_id: projectId,
@@ -200,76 +182,103 @@ const ChatModal = () => {
   return (
     <>
       <button 
-        onClick={() => setIsOpen(prevIsOpen => !prevIsOpen)} 
-        className="bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-lg shadow-lg"
-        aria-label="Toggle Chat"
-        title="Toggle Chat"
+        onClick={() => setIsOpen(true)} 
+        className="bg-blue-950 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300 ease-in-out mr-2"
+        aria-label="Open Chat"
+        title="Open Chat"
       >
         <BiChat className="w-5 h-5 inline" />
       </button>
 
       {isOpen && (
-        <div className="fixed z-10 top-20 right-5 bg-transparent">
+        <div className="fixed z-10 top-40 right-5 bg-transparent">
           <div className="flex items-center justify-center min-h-[300px]">
-            <div className="bg-white rounded-2xl shadow-2xl sm:max-w-md w-full overflow-hidden border border-gray-200">
-              <div className="bg-blue-950 px-4 py-4 border-b border-gray-950 shadow-md">
-                <h3 className="text-lg font-bold text-white">Chat Room</h3>
+            <div className="bg-gradient-to-br from-blue-900 via-blue-400 to-blue-900 rounded-2xl shadow-2xl transform transition-all sm:max-w-md w-full overflow-hidden border border-blue-200">
+              <div className="bg-gradient-to-r from-blue-900 via-blue-400 to-blue-900 px-4 py-4 border-b border-blue-900 shadow-md">
+                <h3 className="text-lg font-bold text-white tracking-wide">Chat Room</h3>
               </div>
               <div
-                className="px-4 py-5 h-80 overflow-y-auto space-y-3 bg-gray-50"
+                className="px-4 py-5 h-80 overflow-y-auto space-y-3 bg-gradient-to-br from-blue-950 via-blue-400 to-blue-950 backdrop-blur-sm"
                 ref={messagesContainerRef}
               >
                 {messages.map((msg, index) => (
                   <div
                   key={msg._id}
-                  className={`p-3 rounded-lg shadow-sm ${
-                      msg.creator_id === localStorage.getItem('userName')
-                        ? 'bg-blue-100 text-gray-800 ml-auto'
-                        : 'bg-gray-100 text-gray-800 mr-auto'
+                  className={`p-3 rounded-2xl shadow-md backdrop-blur-sm ${
+                      msg.creator_id === localStorage.getItem('userEmail')
+                        ? 'bg-gradient-to-r from-blue-800 to-blue-900 text-white ml-auto'
+                        : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white mr-auto'
                     }`}
-                  style={{ maxWidth: '70%', position: 'relative' }}
+                  style={{ maxWidth: '70%',position: 'relative' }}
                   >
+
+{/* Swipe Icon */}
+                    <FaReply
+                      className="absolute top-2 right-2 text-white cursor-pointer"
+                      style={{
+                        fontSize: '1.5rem',
+                        zIndex: 10,
+                      }}
+                    />
+                    
+
                     <div className="flex justify-between items-start">
-                      <p className="font-semibold text-sm text-gray-700">{msg.creator_id}</p>
-                      <p className="text-xs text-gray-500 absolute bottom-1 right-4">
+                      <p className="font-semibold text-sm text-white/90">{msg.creator_id}</p>
+                      <p className="text-xs text-white/70 absolute bottom-1 right-4">
                         {formatDate(msg.created_at)}
                       </p>
                     </div>
                     
                     {msg.content && (
-                      <p className="mt-1 text-gray-800">{msg.content}</p>
+                      <p className="mt-1 text-white/90">{msg.content}</p>
                     )}
                     
                     {msg.file_name && (
-                      <FileDisplay file={msg} />
+                      <div className="mt-2 p-2 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span className="text-sm font-medium text-white/90">{msg.file_name}</span>
+                            <span className="text-xs text-white/70">({formatFileSize(msg.file_size)})</span>
+                          </div>
+                          <button 
+                            className="text-white/90 hover:text-white text-sm font-medium transition-colors"
+                            onClick={() => handleFileDownload(msg)}
+                          >
+                            Download
+                          </button>
+                        </div>
+                      </div>
                     )}
                     
                     <div className="flex items-center space-x-4 mt-2">
                       <button 
                         onClick={() => handleLikeDislike(msg._id, true)}
-                        className="text-sm flex items-center space-x-1 hover:bg-gray-200 p-1 rounded-full"
+                        className="text-sm flex items-center space-x-1 hover:bg-white/10 p-1 rounded-full transition-colors"
                       >
                         <span>👍</span>
-                        <span>{msg.likes.length}</span>
+                        <span className="text-white/90">{msg.likes.length}</span>
                       </button>
                       <button 
                         onClick={() => handleLikeDislike(msg._id, false)}
-                        className="text-sm flex items-center space-x-1 hover:bg-gray-200 p-1 rounded-full"
+                        className="text-sm flex items-center space-x-1 hover:bg-white/10 p-1 rounded-full transition-colors"
                       >
                         <span>👎</span>
-                        <span>{msg.dislike.length}</span>
+                        <span className="text-white/90">{msg.dislike.length}</span>
                       </button>
                     </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="bg-gray-200 px-4 py-4 flex items-center space-x-3 border-t border-gray-300">
+              <div className="bg-gradient-to-r from-blue-300 to-blue-100 px-4 py-4 flex items-center space-x-3 border-t border-blue-200 backdrop-blur-sm">
                 <input
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="flex-grow border border-gray-300 rounded-full p-2 px-4 text-gray-800"
+                  className="flex-grow border border-blue-300 rounded-full p-2 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/90 backdrop-blur-sm shadow-inner"
                   placeholder="Type a message..."
                 />
                 <label className="flex items-center cursor-pointer">
@@ -279,19 +288,21 @@ const ChatModal = () => {
                     className="hidden"
                     accept="*/*"
                   />
-                  <span className="bg-blue-950 text-white rounded-full p-2 shadow-md hover:bg-blue-900">
-                    📎
+                  <span className="bg-gradient-to-r from-blue-500 to-blue-600 p-2 rounded-full hover:from-blue-600 hover:to-blue-700 flex items-center justify-center transition-colors shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-white">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 12v.01M12 16v.01M12 8v.01M4.5 12A7.5 7.5 0 0112 4.5 7.5 7.5 0 0119.5 12 7.5 7.5 0 0112 19.5 7.5 7.5 0 014.5 12z" />
+                  </svg>
                   </span>
                 </label>
                 <button
                   onClick={sendMessage}
-                  className="bg-blue-950 text-white rounded-full px-6 py-2 shadow-lg hover:bg-blue-900"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full px-6 py-2 shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out font-medium"
                 >
                   Send
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-600 p-2 hover:bg-gray-200 rounded-full"
+                  className="text-gray-600 hover:text-gray-800 focus:outline-none p-2 hover:bg-white/50 rounded-full transition-colors"
                 >
                   ✕
                 </button>
@@ -305,3 +316,5 @@ const ChatModal = () => {
 };
 
 export default ChatModal;
+
+
