@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { BiChat } from 'react-icons/bi';
+import ReplyBox from './ReplyBox';
 
 const ChatModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,7 @@ const ChatModal = () => {
   const [messages, setMessages] = useState([]);
   const [userReactions, setUserReactions] = useState({});
   const [isLikeDislikeUpdate, setIsLikeDislikeUpdate] = useState(false); // New state
+  const [replyTo, setReplyTo] = useState(null); // New state for reply
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
@@ -152,7 +154,8 @@ const ChatModal = () => {
         const requestBody = {
           project_id: projectId,
           creator_id: creatorId,
-          content: message.trim()
+          content: message.trim(),
+          reply_to: replyTo ? replyTo._id : null,
         };
 
         if (media) {
@@ -191,10 +194,19 @@ const ChatModal = () => {
       
       setMessage('');
       setMedia(null);
+      setReplyTo(null);
       fetchMessages();
     } catch (error) {
       console.error('Error sending message to server:', error);
     }
+  };
+
+  const handleReply = (message) => {
+    setReplyTo(message); // Set the message to reply to
+  };
+
+  const cancelReply = () => {
+    setReplyTo(null); // Reset replyTo if the user cancels the reply
   };
 
   return (
@@ -243,7 +255,14 @@ const ChatModal = () => {
                     {msg.file_name && (
                       <FileDisplay file={msg} />
                     )}
-                    
+
+                    {msg.reply_to && (
+                      <div className="bg-gray-100 p-2 rounded-lg mt-2">
+                        <p className="text-xs text-gray-500">Replying to {msg.reply_to.creator_id}</p>
+                        <p className="text-sm">{msg.reply_to.content}</p>
+                      </div>
+                    )}
+                             
                     <div className="flex items-center space-x-4 mt-2">
                       <button 
                         onClick={() => handleLikeDislike(msg._id, true)}
@@ -259,12 +278,24 @@ const ChatModal = () => {
                         <span>👎</span>
                         <span>{msg.dislike.length}</span>
                       </button>
+                      <button
+                        onClick={() => handleReply(msg)}
+                        className="text-sm text-gray-600 hover:text-blue-600"
+                      >
+                        Reply
+                      </button>
                     </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
               </div>
               <div className="bg-gray-200 px-4 py-4 flex items-center space-x-3 border-t border-gray-300">
+                {replyTo && (
+                  <div className="bg-blue-100 p-2 rounded-lg w-full flex items-center justify-between">
+                    <p className="text-sm text-gray-700">Replying to: {replyTo.creator_id}</p>
+                    <button onClick={cancelReply} className="text-sm text-blue-600">Cancel</button>
+                  </div>
+                )}
                 <input
                   type="text"
                   value={message}
