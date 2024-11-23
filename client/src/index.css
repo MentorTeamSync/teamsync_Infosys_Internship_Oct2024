@@ -2,9 +2,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Enabling smooth scrolling for the page */
 html{
   scroll-behavior: smooth;
 }
+
+/* Setting up body styling with the 'Montserrat' font */
 body {
     margin: 0;
     padding: 0;
@@ -14,12 +18,13 @@ body {
 
 }
 
-/* width */
+/* Customizing the scrollbar */
 ::-webkit-scrollbar {
     width: 2px;
   }
-  /* Track */
+
   ::-webkit-scrollbar-track {
+    /* Optionally style the scrollbar track */
     
   }
   
