@@ -17,6 +17,7 @@ import { logout } from '../../../../redux/userSlice';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 
+// Reusable component for rendering sidebar menu items with icons
 const IconItem = ({ icon, label, active = false }) => {
   
   return (
@@ -35,6 +36,7 @@ const IconItem = ({ icon, label, active = false }) => {
   );
 };
 
+// Sidebar component to handle navigation and user actions
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");

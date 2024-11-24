@@ -1,6 +1,6 @@
 const express = require("express");
-const { Project, ProjectTag, ProjectUser, User, Task } = require("../db");
-const { validateCreateProject ,checkUserEmailExists, validateTokenProjectOwner, validateUpdateProject, validateAddUsers, checkProjectExists, checkUserAdminExists } = require("../middlewares/ProjectMiddlewares");
+const { Project, ProjectTag, ProjectUser, User, Task, ProjectStatistic } = require("../db");
+const { validateCreateProject ,checkUserEmailExists, validateTokenProjectOwner, validateUpdateProject, validateAddUsers, checkProjectExists, checkUserAdminExists} = require("../middlewares/ProjectMiddlewares");
 const {tokenValidation}=require("../middlewares/UserMiddlewares");
 const router = express.Router();
 const jwt=require("jsonwebtoken");
@@ -74,7 +74,8 @@ router.get("/my-created-projects",checkUserEmailExists,async (req,res)=>{
         },
         {
             $match: {
-                creator_id: email // Filter projects by creator_id matching the email variable
+                creator_id: email, // Filter projects by creator_id matching the email variable
+                status: { $ne: 'archived' } // Exclude projects with status 'archived'
             }
         },
         {
@@ -188,13 +189,13 @@ router.get("/get-all-users/:project_id", checkProjectExists, checkUserAdminExist
     try {
         // Get project id from the URL params
         const project_id = req.params.project_id;
-        console.log("hii")
+        // console.log("hii")
 
         // Get all users assigned to the project
         const users = await ProjectUser.aggregate([
             {
                 $match: {
-                    project_id: project_id // Filter users by project_id
+                    project_id: project_id, // Filter users by project_id
                 }
             },
             {
@@ -254,7 +255,8 @@ router.get("/get-my-assigned-projects", checkUserEmailExists, async (req, res) =
             },
             {
                 $match: {
-                    id: { $in: (await ProjectUser.find({ user_id })).map(proj => proj.project_id) }
+                    id: { $in: (await ProjectUser.find({ user_id })).map(proj => proj.project_id) },
+                    status: { $ne: 'archived' } // Exclude projects with status 'archived'
                 }
             },
             {
@@ -327,5 +329,29 @@ router.get("/:project_id",tokenValidation,checkProjectExists, (req,res)=>{
         return res.status(500).json({ message: "Internal server error" });
     }
 })
+
+// Route to fetch the completion percentage of a project
+router.get('/completion-percentage/:project_id', async (req, res) => {
+    const project_id = req.params.project_id;
+  
+    try {
+      // Fetch the project statistics
+      const projectStats = await ProjectStatistic.findOne({ project_id: project_id });
+  
+      if (!projectStats) {
+        return res.status(404).json({ message: 'Project statistics not found.' });
+      }
+  
+      // Return the stored completion percentage
+      return res.status(200).json({
+        project_id: project_id,
+        completion_percentage: projectStats.completion_percentage
+      });
+    } catch (error) {
+      console.error('Error fetching project completion percentage:', error);
+      return res.status(500).json({ message: 'Internal server error.' });
+    }
+  }
+  );
 
 module.exports = router;

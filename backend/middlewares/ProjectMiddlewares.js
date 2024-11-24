@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const {User, Project, ProjectUser, Admin} = require("../db/index"); 
+const {User, Project, ProjectUser, Admin, ProjectStatistic} = require("../db/index"); 
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 

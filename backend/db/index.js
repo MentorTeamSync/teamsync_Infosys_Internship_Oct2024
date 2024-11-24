@@ -237,12 +237,12 @@ const TaskSchema = new mongoose.Schema({
     deadline: Date,
     status: {
         type: String,
-        enum: ['0', '1', '2'], //To Do, In Progress, Completed
+        enum: ['0', '1', '2'],
         required: true
     },
     priority: {
         type: String,
-        enum: ['0', '1', '2'], 
+        enum: ['0', '1', '2'],
         required: true
     },
     creator_id: {
@@ -428,7 +428,8 @@ const NotificationSchema= new mongoose.Schema({
         unique: true
     },
     user_id: {
-        type: String,
+  
+      type: String,
         ref: 'User',
         required: true
     },
@@ -477,7 +478,6 @@ const ProjectStatisticSchema = new mongoose.Schema({
         default: Date.now
     }
 });
-
 // Project Tag Schema
 const ProjectTagSchema = new mongoose.Schema({
     id: {
@@ -543,9 +543,11 @@ async function updateProjectStatisticsOnTaskDeletion(task) {
     try {
         const projectStat = await ProjectStatistic.findOne({ project_id: task.project_id });
         if (projectStat) {
+            console.log(task);
+            console.log(task.status);
             // Decrement total tasks and, if the task was completed, decrement completed tasks
             projectStat.total_tasks -= 1;
-            if (task.status === '2') {
+            if (task.status == '2') {
                 projectStat.completed_tasks -= 1;
             }
             // Update completion percentage

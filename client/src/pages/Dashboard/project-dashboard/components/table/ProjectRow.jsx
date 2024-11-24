@@ -18,6 +18,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [updatedStatus, setUpdatedStatus] = useState(project.status);
   const [updatedAbout, setUpdatedAbout] = useState(project.description);
+  const [progress, setProgress] = useState(0);
   const [updatedDeadline, setUpdatedDeadline] = useState(
     project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : '' // Set deadline in YYYY-MM-DD format
   );
@@ -245,6 +246,22 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchCompletionPercentage = async () => {
+      const projectid=localStorage.getItem('project_id')
+      try {
+        const response = await axios.get(`http://localhost:3001/project/completion-percentage/${projectid}`);
+        const completionPercentage = parseFloat(response.data.completion_percentage || 0).toFixed(2);
+        setProgress(completionPercentage);
+      } catch (error) {
+        console.error('Error fetching completion percentage:', error);
+      }
+    };
+
+    fetchCompletionPercentage();
+  }, []);
+
+
   return (
     <>
       <ToastContainer />
@@ -293,7 +310,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
     </div>
   </td>
   <td className="py-3 px-2 md:px-4">
-    <ProgressBar progress={project.progress || 0} />
+    <ProgressBar progress={progress || 0} />
   </td>
   <td className="py-3 ps-5 px-2 md:px-4 text-xs text-gray-500">
     {formattedDeadline}

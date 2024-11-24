@@ -11,7 +11,7 @@ const ReportModal = () => {
     totalTasks: 0,
     completedTasks: 0,
     pendingTasks: 0,
-    pastDueTasks: 0
+    pastDueTasks: 0,
   });
 
   const chartData = {
@@ -41,14 +41,13 @@ const ReportModal = () => {
       try {
         const response = await axios.get(`http://localhost:3001/project/report/${projectId}`, {
           headers: {
-            'authorization': token
-          }
+            authorization: token,
+          },
         });
 
         setTaskStats(response.data);
       } catch (error) {
         console.error("Error fetching task stats:", error);
-        // Optionally handle different error scenarios
         if (error.response) {
           switch (error.response.status) {
             case 400:
@@ -97,11 +96,22 @@ const ReportModal = () => {
             </div>
             {/* Modal Body: Flex Layout */}
             <div className="flex flex-col md:flex-row gap-6 p-6">
+              {/* Left Side: Chart or Message */}
               <div className="w-full md:w-1/2 flex items-center justify-center bg-blue-50 p-4 rounded-md shadow-md">
-                <div className="w-full h-[250px]">
-                  <Pie data={chartData} />
-                </div>
+                {taskStats.totalTasks === 0 ? (
+                  <div className="bg-blue-100 border border-blue-300 text-blue-800 text-center rounded-md p-4 shadow-md">
+                    <p className="font-semibold text-lg">No tasks available</p>
+                    <p className="text-sm mt-2">
+                      This project currently has no tasks assigned. Please add tasks to view progress.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="w-full h-[250px]">
+                    <Pie data={chartData} />
+                  </div>
+                )}
               </div>
+              {/* Right Side: Details */}
               <div className="w-full md:w-1/2 space-y-4">
                 <div className="bg-gray-200 p-4 rounded-md shadow-sm">
                   <h3 className="font-semibold text-gray-700 mb-2">Project Overview</h3>

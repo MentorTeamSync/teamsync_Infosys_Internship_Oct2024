@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Styling for the main App container */
 .App {
   text-align: center;
 }
@@ -10,12 +13,14 @@
   pointer-events: none;
 }
 
+/* Animation for logo spinning, only applies if user prefers normal motion */
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
+/* Styling for the App header */
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -27,16 +32,18 @@
   color: white;
 }
 
+/* Styling for the App link */
 .App-link {
   color: #61dafb;
 }
 
+/* Keyframes for logo spinning animation */
 @keyframes App-logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg);/* Start rotation at 0 degrees */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg);/* End rotation at 360 degrees (full circle) */
   }
 }
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");

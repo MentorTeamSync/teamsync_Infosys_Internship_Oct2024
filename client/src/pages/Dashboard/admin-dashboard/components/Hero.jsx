@@ -11,14 +11,17 @@ import PendingProject from './PenginProject';
 import Users from './Users';
 import ArchivedProjectsTable from './table/ArchivedProjectsTable'; // Import ArchivedProjectsTable
 
+// Hero component to manage the main content area
 const Hero = ({ sidebarOpen, setSidebarOpen }) => {
   const selectedSidebar = useRecoilValue(sidebarSelection);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+   // Function to open the modal
   const openModal = () => {
     setIsModalOpen(true);
   };
 
+  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -69,4 +72,4 @@ const Hero = ({ sidebarOpen, setSidebarOpen }) => {
   );
 };
 
-export default Hero;
+export default Hero; // Export the Hero component

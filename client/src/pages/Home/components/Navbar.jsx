@@ -144,39 +144,33 @@ const Navbar = ({ setSignInOpen }) => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="fixed top-[80px] left-0 right-0 bottom-0 bg-black/50 z-40 md:hidden" onClick={() => setMenuOpen(false)}>
-          <ul className="absolute right-0 top-0 bg-white p-5 rounded-lg shadow-lg w-[85%] z-50 transition-all duration-300">
-            <li className="group relative">
-              <a href="#features" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD]">
+          <ul className="absolute right-[30px] top-[20px] bg-white p-5 rounded-lg shadow-lg w-[300px] z-50 transition-all duration-300">
+            <li className="group relative mt-1 flex items-center justify-center h-12">
+              <a href="#features" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD] text-center">
                 Features
               </a>
               <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>
             </li>
-            <li className="group relative mt-5">
-              <a href="#benefits" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD]">
+            <li className="group relative mt-5 flex items-center justify-center h-12">
+              <a href="#benefits" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD] text-center">
                 Benefits
               </a>
               <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>
             </li>
-            <li className="group relative">
-            <a href="#testi" onClick={handleMenuItemClick} className="font-semibold text-lg text-white transition-colors duration-300 group-hover:text-[#6B5BCD]">
-              Testimonials
-            </a>
-            <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>
-            </li>
-            <li className="group relative mt-5">
-              <a href="#testi" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD]">
+            <li className="group relative mt-5 flex items-center justify-center h-12">
+              <a href="#testi" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD] text-center">
                 Testimonials
               </a>
               <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>
             </li>
-            <li className="group relative mt-5">
-              <a href="#faq" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD]">
+            <li className="group relative mt-5 flex items-center justify-center h-12">
+              <a href="#faq" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD] text-center">
                 FAQs
               </a>
               <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>
             </li>
-            <li className="group relative mt-5">
-              <a href="#about" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD]">
+            <li className="group relative mt-5 flex items-center justify-center h-12">
+              <a href="#about" onClick={handleMenuItemClick} className="font-semibold text-lg text-gray-700 transition-colors duration-300 group-hover:text-[#6B5BCD] text-center">
                 About Us
               </a>
               <span className="absolute bottom-[-6px] left-1/2 w-0 h-[2px] bg-[#6B5BCD] group-hover:w-full transition-all duration-300 ease-in-out origin-center group-hover:left-0"></span>

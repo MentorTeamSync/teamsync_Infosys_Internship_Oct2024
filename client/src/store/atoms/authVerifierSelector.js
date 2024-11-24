@@ -1,8 +1,14 @@
 import { selector } from 'recoil';
 import {jwtDecode} from 'jwt-decode';
 
+/**
+ * Recoil selector for verifying authentication state from a JWT token.
+ * Validates the token's presence, expiration, and structure to determine
+ * the user's authentication and authorization status.
+ */
+
 export const authenticationState = selector({
-  key: 'authenticationState',
+  key: 'authenticationState', // Unique key for the selector
   get: () => {
     const token = localStorage.getItem('token');
     
