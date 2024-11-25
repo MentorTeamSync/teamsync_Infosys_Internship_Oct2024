@@ -161,8 +161,9 @@ const Sidebar = ({ isOpen, onClose }) => {
               <li  onClick={() => {
                 setActive("notes");
                 setSidebarSelection("notes");
+                navigate("/Notes")
               }}
-              ><IconItem icon={faClipboard} label="Create Notes"  active={active === "notes"} /></li>
+              ><IconItem icon={faClipboard} label="Notes"  active={active === "notes"} /></li>
             </ul>
           </nav>
 

@@ -1,7 +1,12 @@
+import React, { useEffect, useState } from "react";
 import './App.css';
 import Home from './pages/Home/Home';
+import ProjectDashboard from './pages/Dashboard/project-dashboard/ProjectDashboard';
+import AdminDashboard from './pages/Dashboard/admin-dashboard/AdminDashboard';
+import Sidebar from "./pages/Notes/Sidebar";
+import Notes from "./pages/Notes/Notes";
 import { ThemeProvider } from "styled-components";
-import { darkTheme, lightTheme } from "./utils/Theme";
+import { darkTheme } from "./utils/Theme";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
@@ -12,62 +17,97 @@ import {
 import { Snackbar, Alert } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { closeSnackbar } from "./redux/snackbarSlice";
-import ProjectDashboard from './pages/Dashboard/project-dashboard/ProjectDashboard';
-import AdminDashboard from './pages/Dashboard/admin-dashboard/AdminDashboard';
 import { RecoilRoot } from 'recoil';
-// import Profile from './pages/Dashboard/profile/Profile';
+import uuid from "react-uuid";
 
-// Main application component
 function App() {
-  // Get the current state of the snackbar from Redux
+  // Snackbar state for notifications
   const snackbarState = useSelector((state) => state.snackbar);
-  // Dispatch function to send actions to the Redux store
   const dispatch = useDispatch();
 
-  // Function to handle closing of the snackbar notification
-  const handleClose = (event, reason) => {
-    // Prevent snackbar from closing if user clicks away
-    if (reason === "clickaway") {
-      return;
+  // Note-taking state and logic
+  const [notes, setNotes] = useState(
+    localStorage.notes ? JSON.parse(localStorage.notes) : []
+  );
+  const [activeNote, setActiveNote] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const onAddNote = () => {
+    const newNote = {
+      id: uuid(),
+      title: "Untitled Note",
+      body: "",
+      lastModified: Date.now(),
+    };
+    setNotes([newNote, ...notes]);
+    setActiveNote(newNote.id);
+  };
+
+  const onDeleteNote = (noteId) => {
+    setNotes(notes.filter(({ id }) => id !== noteId));
+    if (noteId === activeNote) {
+      setActiveNote(null);
     }
-    // Dispatch an action to close the snackbar
+  };
+
+  const onUpdateNote = (updatedNote) => {
+    const updatedNotesArr = notes.map((note) =>
+      note.id === updatedNote.id ? updatedNote : note
+    );
+    setNotes(updatedNotesArr);
+  };
+
+  const getActiveNote = () => {
+    return notes.find((note) => note.id === activeNote);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") return;
     dispatch(closeSnackbar());
   };
 
   return (
-    // RecoilRoot provides the Recoil state management context to the application
     <RecoilRoot>
-    <DndProvider backend={HTML5Backend}>
-      <ThemeProvider theme={darkTheme}>
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/">
-              <Route index element={<Home />} />
-            </Route>
-            <Route exact path="/dashboard/user">
-              <Route index element={<ProjectDashboard />} />
-            </Route>
-            {/* <Route exact path="/dashboard/profile">
-              <Route index element={<Profile />} />
-            </Route> */}
-            <Route exact path="/dashboard/admin">
-              <Route index element={<AdminDashboard />} />
-            </Route>
-          </Routes>
+      <DndProvider backend={HTML5Backend}>
+        <ThemeProvider theme={darkTheme}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard/user" element={<ProjectDashboard />} />
+              <Route path="/dashboard/admin" element={<AdminDashboard />} />
+              <Route
+                path="/Notes"
+                element={
+                  <div className="App">
+                    <Sidebar
+                      notes={notes}
+                      onAddNote={onAddNote}
+                      onDeleteNote={onDeleteNote}
+                      activeNote={activeNote}
+                      setActiveNote={setActiveNote}
+                    />
+                    <Notes activeNote={getActiveNote()} onUpdateNote={onUpdateNote} />
+                  </div>
+                }
+              />
+            </Routes>
 
-          {/* Snackbar component to display notifications */}
-          <Snackbar
-            open={snackbarState.open}  // Controls if the snackbar is visible
-            autoHideDuration={6000}    // Automatically hides the snackbar after 6 seconds
-            onClose={handleClose}      // Callback function to handle close event
-          >
-            <Alert onClose={handleClose} severity={snackbarState.severity}>
-              {snackbarState.message}     
-            </Alert>
-          </Snackbar>
-        </BrowserRouter>
-      </ThemeProvider>
-    </DndProvider>
+            {/* Snackbar for notifications */}
+            <Snackbar
+              open={snackbarState.open}
+              autoHideDuration={6000}
+              onClose={handleCloseSnackbar}
+            >
+              <Alert onClose={handleCloseSnackbar} severity={snackbarState.severity}>
+                {snackbarState.message}
+              </Alert>
+            </Snackbar>
+          </BrowserRouter>
+        </ThemeProvider>
+      </DndProvider>
     </RecoilRoot>
   );
 }
