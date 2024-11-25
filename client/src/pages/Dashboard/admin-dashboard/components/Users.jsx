@@ -19,7 +19,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/admin/all-users', {
+        const response = await axios.get('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/all-users', {
           headers: { 'authorization': token, 'Content-Type': 'application/json' },
         });
         setUsers(response.data);
@@ -67,7 +67,7 @@ const Users = () => {
       const newState = selectedUser.state === 'verified' ? 'blocked' : 'verified';
 
       await axios.put(
-        'http://localhost:3001/admin/user-state',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/user-state',
         { user_id: userId },
         { headers: { authorization: token } }
       );
@@ -87,7 +87,7 @@ const Users = () => {
   const handleRemove = async (user) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3001/admin/user/${user.id}`, {
+      await axios.delete(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/user/${user.id}`, {
         headers: { 'authorization': token }
       });
 

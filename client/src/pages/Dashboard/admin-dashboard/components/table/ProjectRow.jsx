@@ -30,7 +30,7 @@ export const ProjectRow = ({ project, onArchive }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3001/admin/approve-project',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/approve-project',
         {
           project_id: project.id,
           status: 'approved',
@@ -59,7 +59,7 @@ export const ProjectRow = ({ project, onArchive }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3001/admin/archive-project',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/archive-project',
         {
           project_id: project.id,
         },
@@ -110,7 +110,7 @@ export const ProjectRow = ({ project, onArchive }) => {
       const projectid=project.id;
       try {
         const token=localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:3001/project/report/${projectid}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/report/${projectid}`, {
           headers: {
             authorization: token,
           },

@@ -51,7 +51,7 @@ const AddProjectModal = ({ isOpen, onClose }) => {
 
       try { 
          // Send project data to server using Axios
-        const response = await axios.post('http://localhost:3001/project/create', projectData, {
+        const response = await axios.post('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/create', projectData, {
           headers: {
             Authorization: token,
             'Content-Type': 'application/json',

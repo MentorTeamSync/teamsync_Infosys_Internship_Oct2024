@@ -39,7 +39,7 @@ const ReportModal = () => {
   useEffect(() => {
     const fetchTaskStats = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/project/report/${projectId}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/report/${projectId}`, {
           headers: {
             authorization: token,
           },

@@ -46,7 +46,7 @@ const AddProjectModal = ({ isOpen, onClose }) => {
   // Asynchronous function to check if a project name already exists
   const checkProjectNameExists = async (name) => {
     try {
-      const response = await axios.get(`http://localhost:3001/project/check-name?name=${name}`);
+      const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/check-name?name=${name}`);
       return response.data.exists;
     } catch (error) {
       console.error('Error checking project name:', error);
@@ -112,7 +112,7 @@ const AddProjectModal = ({ isOpen, onClose }) => {
           tags
         };
 
-        const response = await axios.post('http://localhost:3001/project/create', projectData, {
+        const response = await axios.post('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/create', projectData, {
           headers: {
             Authorization: token,
             'Content-Type': 'application/json',

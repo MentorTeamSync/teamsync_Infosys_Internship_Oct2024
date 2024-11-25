@@ -16,7 +16,7 @@ const ArchivedProjectsTable = () => {
     const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/admin/get-archived-projects', {
+        const response = await axios.get('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/get-archived-projects', {
           headers: {
             authorization: token,
             'Content-Type': 'application/json',

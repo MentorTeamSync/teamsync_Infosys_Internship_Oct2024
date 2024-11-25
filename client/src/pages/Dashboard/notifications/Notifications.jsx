@@ -53,7 +53,7 @@ const Notifications = () => {
           throw new Error('User ID not found');
         }
 
-        const response = await axios.get(`http://localhost:3001/comment/unread-by-project/${userId}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/unread-by-project/${userId}`, {
           headers: {
             'authorization': token,
             'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ const Notifications = () => {
             throw new Error('User ID not found');
         }
 
-        const res = await axios.post(`http://localhost:3001/comment/markAsRead`,{project_id:notification.project_id} ,{
+        const res = await axios.post(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/markAsRead`,{project_id:notification.project_id} ,{
             headers: {
             'authorization': token,
             'Content-Type': 'application/json'

@@ -48,7 +48,7 @@ const ProfileModal = ({ isOpen, onClose, onResetPassword }) => { // Retrieve use
     try {
       // Send a PUT request to update the user's name
       const response = await axios.put(
-        'http://localhost:3001/user/edit-name', // API endpoint for editing name
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/edit-name', // API endpoint for editing name
         { name: newName }, // Data to be sent in the request
         { headers: { authorization: localStorage.getItem('token') } } // Authorization header
       );

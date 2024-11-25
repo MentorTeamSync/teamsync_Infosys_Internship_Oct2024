@@ -17,7 +17,7 @@ const UserTable = () => {
       try {
         const token = localStorage.getItem('token');
         const pid=localStorage.getItem('project_id')
-        const response = await axios.get(`http://localhost:3001/project/get-all-users/${pid}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/get-all-users/${pid}`, {
           headers: {
             'authorization': token,
             'Content-Type': 'application/json'

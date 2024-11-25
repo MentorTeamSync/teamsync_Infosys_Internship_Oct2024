@@ -23,7 +23,7 @@ const UnifiedProjectTable = ({
     const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3001/project/${endpoint}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/${endpoint}`, {
           headers: {
             'authorization': token,
             'Content-Type': 'application/json'

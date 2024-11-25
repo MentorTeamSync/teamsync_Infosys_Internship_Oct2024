@@ -72,7 +72,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3001/task/project/${projectId}/create-task`,
+        `https://teamsync-infosys-internship-oct2024-9gij.vercel.app/task/project/${projectId}/create-task`,
         {
           title,
           description,

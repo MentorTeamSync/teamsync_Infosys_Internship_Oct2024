@@ -64,7 +64,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
       setLoading(true);
       dispatch(loginStart());
 
-      const response = await axios.post("http://localhost:3001/user/signup", {
+      const response = await axios.post("https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/signup", {
         email,
         name,
         password,

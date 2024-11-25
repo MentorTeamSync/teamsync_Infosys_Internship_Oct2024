@@ -119,7 +119,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
   const fetchMembers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:3001/project/get-all-users/${project.id}`, {
+      const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/get-all-users/${project.id}`, {
         headers: { authorization: token },
       });
       setMembers(response.data);
@@ -131,12 +131,12 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3001/admin/all-users-Users', {
+      const response = await axios.get('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/all-users-Users', {
         headers: { authorization: token }
       });
       
       // Get existing project members
-      const projectMembersResponse = await axios.get(`http://localhost:3001/project/get-all-users/${project.id}`, {
+      const projectMembersResponse = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/get-all-users/${project.id}`, {
         headers: { authorization: token },
       });
       
@@ -178,7 +178,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
       if (updatedDeadline) {
         dataToSend.deadline = updatedDeadline;
       }
-      await axios.post('http://localhost:3001/project/addUsers', dataToSend
+      await axios.post('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/addUsers', dataToSend
         ,
         {
           headers: { Authorization: token }
@@ -225,7 +225,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
     }
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.put('http://localhost:3001/project/update', 
+      const response = await axios.put('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/update', 
         {
           project_id: project.id,
           description: updatedAbout,
@@ -251,7 +251,7 @@ export const ProjectRow = ({ project, isCreatedProject = false }) => {
       const projectid=project.id;
       try {
         const token=localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:3001/project/report/${projectid}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/report/${projectid}`, {
           headers: {
             authorization: token,
           },

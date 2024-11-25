@@ -17,7 +17,7 @@ const FileTable = () => {
       try {
         const token = localStorage.getItem('token');
         const pid = localStorage.getItem('project_id');
-        const response = await axios.post(`http://localhost:3001/comment/get-files`,
+        const response = await axios.post(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/get-files`,
           { project_id: pid }, 
           {
             headers: {

@@ -23,12 +23,12 @@ const AddAssigneesModal = ({ isOpen, onClose, taskId, onSuccess }) => {
       const token = localStorage.getItem('token');
       const pid=localStorage.getItem('project_id');
       // Fetch all available users
-      const allUsersResponse = await axios.get(`http://localhost:3001/project/get-all-users/${pid}`, {
+      const allUsersResponse = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/get-all-users/${pid}`, {
         headers: { authorization: token }
       });
 
       // Fetch users already assigned to the task
-      const assignedUsersResponse = await axios.get(`http://localhost:3001/task/${taskId}/assigned-users`, {
+      const assignedUsersResponse = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/task/${taskId}/assigned-users`, {
         headers: { authorization: token }
       });
 
@@ -69,7 +69,7 @@ const AddAssigneesModal = ({ isOpen, onClose, taskId, onSuccess }) => {
       const token = localStorage.getItem('token');
       
       await axios.post(
-        `http://localhost:3001/task/${taskId}/add-assignee`,
+        `https://teamsync-infosys-internship-oct2024-9gij.vercel.app/task/${taskId}/add-assignee`,
         {
           assignee_ids: selectedUsers.map(user => user.id)
         },

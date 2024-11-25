@@ -34,7 +34,7 @@ const Hero = ({ sidebarOpen, setSidebarOpen }) => {
       }
 
       try {
-        const response = await axios.get(`http://localhost:3001/project/${projectId}`, {
+        const response = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/project/${projectId}`, {
           headers: {
             'authorization': token
           }

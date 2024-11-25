@@ -335,7 +335,7 @@ const MyTasksTable = ({ type = 'assigned' }) => {
       let response;
       if (type === 'assigned') {
         response = await axios.get(
-          `http://localhost:3001/task/user/${userId}/assigned-tasks`,
+          `https://teamsync-infosys-internship-oct2024-9gij.vercel.app/task/user/${userId}/assigned-tasks`,
           {
             headers: {
               'authorization': token,
@@ -344,7 +344,7 @@ const MyTasksTable = ({ type = 'assigned' }) => {
         );
       } else {
         response = await axios.get(
-          `http://localhost:3001/task/user/${userEmail}/created-tasks`,
+          `https://teamsync-infosys-internship-oct2024-9gij.vercel.app/task/user/${userEmail}/created-tasks`,
           {
             headers: {
               'authorization': token,

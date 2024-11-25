@@ -19,7 +19,7 @@ const UsersProject = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3001/admin/all-users-Users', {
+        const response = await axios.get('https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/all-users-Users', {
           headers: {
             'authorization': token,
             'Content-Type': 'application/json'

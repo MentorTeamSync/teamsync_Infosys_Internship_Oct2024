@@ -102,8 +102,8 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
         const res = await axios.post(
           `${
             isAdmin
-              ? "http://localhost:3001/admin/signin"
-              : "http://localhost:3001/user/signin"
+              ? "https://teamsync-infosys-internship-oct2024-9gij.vercel.app/admin/signin"
+              : "https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/signin"
           }`,
           { email, password } // Send email and password to API
         );

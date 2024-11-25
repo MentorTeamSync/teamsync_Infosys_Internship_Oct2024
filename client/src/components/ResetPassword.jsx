@@ -84,7 +84,7 @@ const PasswordResetForm = ({ email, setResetPasswordOpen, setSignInOpen }) => {
     setLoading(true);
 
     try {
-      const response = await axios.put("http://localhost:3001/user/reset", {
+      const response = await axios.put("https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/reset", {
         email,
         resetOtp,
         password,
@@ -241,7 +241,7 @@ const ResetPassword = ({ setResetPasswordOpen, setSignInOpen }) => {
     setError("");
 
     try {
-      await axios.post("http://localhost:3001/user/reset", { email });
+      await axios.post("https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/reset", { email });
       dispatch(
         openSnackbar({
           message: "Password reset OTP sent to your email!",

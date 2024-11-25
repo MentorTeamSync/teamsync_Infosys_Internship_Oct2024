@@ -272,7 +272,7 @@ import 'react-toastify/dist/ReactToastify.css';
       const projectId = localStorage.getItem('project_id');
       
       const response = await axios.post(
-        'http://localhost:3001/comment/messages',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/messages',
         { project_id: projectId },
         { headers: { Authorization: token } }
       );
@@ -308,7 +308,7 @@ import 'react-toastify/dist/ReactToastify.css';
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        'http://localhost:3001/comment/like-dislike',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/like-dislike',
         { 
           like: isLike ? 1 : 0, 
           comment_id: commentId 
@@ -391,7 +391,7 @@ import 'react-toastify/dist/ReactToastify.css';
   const sendRequestToServer = async (requestBody, token) => {
     try {
       await axios.post(
-        'http://localhost:3001/comment/send-message',
+        'https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/send-message',
         requestBody,
         {
           headers: {

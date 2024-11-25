@@ -159,7 +159,7 @@ const OTP = ({ email, name, otpVerified, setOtpVerified, reason }) => {
   // Function to send the OTP to the user's email
   const sendOtp = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/user/verify", {
+      const response = await axios.post("https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/verify", {
         email,
       }); // Send OTP request
       if (response.status === 200) {
@@ -203,7 +203,7 @@ const OTP = ({ email, name, otpVerified, setOtpVerified, reason }) => {
     setOtpLoading(true); // Set loading state to true
     setDisabled(true); // Disable the submit button
     try {
-      const response = await axios.put("http://localhost:3001/user/verify", {
+      const response = await axios.put("https://teamsync-infosys-internship-oct2024-9gij.vercel.app/user/verify", {
         email: email,
         registerOtp: otp, // Send the OTP for validation
       });

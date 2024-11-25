@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, onClose }) => {
   const fetchNotification = async () => {
     try {
       const uid = localStorage.getItem("userId");
-      const res = await axios.get(`http://localhost:3001/comment/total-unread/${uid}`);
+      const res = await axios.get(`https://teamsync-infosys-internship-oct2024-9gij.vercel.app/comment/total-unread/${uid}`);
       if (res.data.success) {
         setUnreadNotifications(res.data.total_unread);
       }
