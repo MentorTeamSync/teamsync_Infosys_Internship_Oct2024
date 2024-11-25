@@ -1,34 +1,26 @@
-const nodemailer = require('nodemailer');
-require("dotenv").config();
+const sgMail = require('@sendgrid/mail');
+dotenv = require('dotenv');
 
-// Set up the Nodemailer transporter using Gmail SMTP
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'noreply.teamsync@gmail.com',    // Your Gmail email address
-        pass: process.env.MAILER_PASS        // Your Gmail password or App Password (if 2FA is enabled)
-    }
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+console.log("SendGrid API Key (Masked):", process.env.SENDGRID_API_KEY ? "Exists" : "Missing");
 
-// Function to send OTP email
+
 const sendOtpEmail = async (recipientEmail, otp, message) => {
-    try {
-        const mailOptions = {
-            from: 'noreply.teamsync@gmail.com',        // Sender's email address
-            to: recipientEmail,                  // Recipient's email address
-            subject: 'Your OTP Code',            // Subject of the email
-            text: `${message}: ${otp}`     // Email body (plain text)
-        };
+    const msg = {
+        to: recipientEmail,
+        from: 'noreply.teamsync@gmail.com', 
+        subject: 'Vroomify OTP Verification',
+        text: `${message} ${otp}`,
+        html: `<strong>${message} ${otp}</strong>`,
+    };
 
-        // Send email
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+    try {
+        const response = await sgMail.send(msg);
+        console.log("SendGrid Response:", response[0].statusCode, response[0].headers);
     } catch (error) {
-        console.error('Error sending email:', error);
-        throw new Error('Failed to send OTP email.');
+        console.error("Error sending email via SendGrid:", error.response?.body || error.message);
     }
 };
 
-
-//export 
+// Export the sendOtpEmail function for use in other parts of the application
 module.exports = { sendOtpEmail };
