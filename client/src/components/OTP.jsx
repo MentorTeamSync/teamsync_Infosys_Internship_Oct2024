@@ -218,7 +218,7 @@ const OTP = ({ email, name, otpVerified, setOtpVerified, reason }) => {
         setEmailRecoil(decoded.email); // Set email in Recoil state
         setIsAdminRecoil(!!decoded.admin_id); // Set admin status in Recoil state
         setUserIdRecoil(decoded.admin_id || decoded.user_id); // Set user ID in Recoil state
-        localStorage.setItem("userName", resendOtp.data.name); // Store user name in local storage
+        localStorage.setItem("userName", response.data.name); // Store user name in local storage
         localStorage.setItem("userEmail", decoded.email); // Store user email in local storage
         localStorage.setItem("userJoindate", response.data.joined_at); // Store user join date in local storage
 
