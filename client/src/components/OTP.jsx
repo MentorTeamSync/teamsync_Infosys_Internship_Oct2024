@@ -221,7 +221,9 @@ const OTP = ({ email, name, otpVerified, setOtpVerified, reason }) => {
         localStorage.setItem("userName", response.data.name); // Store user name in local storage
         localStorage.setItem("userEmail", decoded.email); // Store user email in local storage
         localStorage.setItem("userJoindate", response.data.joined_at); // Store user join date in local storage
-
+        //set localstorage item userId for admin or user as per recieved
+        localStorage.setItem("userId", decoded.admin_id || decoded.user_id);
+        
         setOtpVerified(true); // Mark OTP as verified
         setOtp(""); // Clear OTP input
         setOtpError(""); // Clear any existing error messages
