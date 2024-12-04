@@ -330,7 +330,7 @@ const CompletedTaskTable = ({ refreshTrigger }) => {
 
   // Create axios instance with default config
   const api = axios.create({
-    baseURL: "http://localhost:3001",
+    baseURL: "https://teamsync-infosys-internship-oct2024-9gij.vercel.app",
     headers: {
       Authorization: localStorage.getItem("token"),
     },
